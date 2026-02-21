@@ -15,6 +15,14 @@ const SYMBOL_VALUES = {
   D: 2,
 };
 
+// Map symbols to emojis for visual display
+const SYMBOL_DISPLAY = {
+  A: "7️⃣",
+  B: "🔔",
+  C: "🍋",
+  D: "🍒",
+};
+
 let balance = 0;
 
 function startGame() {
@@ -62,24 +70,45 @@ function transpose(reels) {
 
 function getWinnings(rows, bet, lines) {
   let winnings = 0;
-
   for (let row = 0; row < lines; row++) {
     const symbols = rows[row];
     let allSame = true;
-
     for (const symbol of symbols) {
       if (symbol !== symbols[0]) {
         allSame = false;
         break;
       }
     }
-
     if (allSame) {
       winnings += bet * SYMBOL_VALUES[symbols[0]];
     }
   }
-
   return winnings;
+}
+
+function displayReels(rows, winningRows) {
+  const display = document.getElementById("slot-display");
+  display.innerHTML = "";
+
+  // Build a 3x3 grid
+  const grid = document.createElement("div");
+  grid.className = "reel-grid";
+
+  for (let r = 0; r < rows.length; r++) {
+    for (let c = 0; c < rows[r].length; c++) {
+      const cell = document.createElement("div");
+      cell.className = "reel-cell";
+
+      if (winningRows.includes(r)) {
+        cell.classList.add("reel-win");
+      }
+
+      cell.textContent = SYMBOL_DISPLAY[rows[r][c]];
+      grid.appendChild(cell);
+    }
+  }
+
+  display.appendChild(grid);
 }
 
 function play() {
@@ -100,19 +129,29 @@ function play() {
   const reels = spin();
   const rows = transpose(reels);
 
-  const display = document.getElementById("slot-display");
-  display.innerHTML = "";
-
-  for (const row of rows) {
-    display.innerHTML += row.join(" | ") + "<br>";
+  // Find winning rows
+  const winningRows = [];
+  for (let row = 0; row < lines; row++) {
+    const symbols = rows[row];
+    const allSame = symbols.every(s => s === symbols[0]);
+    if (allSame) winningRows.push(row);
   }
+
+  displayReels(rows, winningRows);
 
   const winnings = getWinnings(rows, bet, lines);
   balance += winnings;
 
   document.getElementById("balance").innerText = balance;
-  document.getElementById("result").innerText = 
-    winnings > 0 ? "You won $" + winnings : "No win this time";
+
+  const resultEl = document.getElementById("result");
+  if (winnings > 0) {
+    resultEl.innerText = "🎉 You won $" + winnings + "!";
+    resultEl.style.color = "#FFD700";
+  } else {
+    resultEl.innerText = "😢 No win this time";
+    resultEl.style.color = "#888";
+  }
 
   if (balance <= 0) {
     alert("Game Over!");

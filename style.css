@@ -161,15 +161,11 @@ button:active {
 }
 
 #slot-display {
-  font-size: 2.8rem;
   min-height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #111;
   border-radius: 14px;
   border: 1px solid #333;
-  letter-spacing: 14px;
+  padding: 12px;
   box-shadow: 0 0 20px rgba(0,0,0,0.8) inset;
 }
 
@@ -188,4 +184,41 @@ button:active {
   .game-box { padding: 28px 20px; }
   .spin-section { flex-wrap: wrap; }
   .spin-section button { width: 100%; }
+}
+
+/* Reel Grid */
+.reel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+}
+
+.reel-cell {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5) inset;
+}
+
+.reel-cell.reel-win {
+  border-color: #FFD700;
+  background: rgba(255, 215, 0, 0.08);
+  box-shadow:
+    0 0 16px rgba(255, 215, 0, 0.4),
+    0 2px 8px rgba(0,0,0,0.5) inset;
+  animation: winPulse 0.6s ease-in-out;
+}
+
+@keyframes winPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
