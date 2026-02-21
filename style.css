@@ -1,25 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  font-family: Arial;
+  font-family: 'Lato', sans-serif;
   text-align: center;
   background: #111;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(180, 140, 0, 0.15) 0%, transparent 60%);
   color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #FFD700;
+  text-shadow:
+    0 0 20px rgba(255, 215, 0, 0.6),
+    0 2px 4px rgba(0,0,0,0.8);
+  margin-bottom: 28px;
 }
 
 .game-box {
-  margin-top: 30px;
+  background: #1a1a1a;
+  border: 2px solid #8B6914;
+  border-radius: 20px;
+  padding: 40px 28px;
+  width: 100%;
+  max-width: 560px;
+  box-shadow:
+    0 0 0 4px #111,
+    0 0 0 6px #8B6914,
+    0 0 50px rgba(255, 215, 0, 0.1),
+    0 20px 60px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+/* Corner decorations */
+.game-box::before,
+.game-box::after {
+  content: '♦';
+  position: absolute;
+  color: #FFD700;
+  font-size: 1.2rem;
+  opacity: 0.6;
+}
+
+.game-box::before {
+  top: 14px;
+  left: 18px;
+}
+
+.game-box::after {
+  top: 14px;
+  right: 18px;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8B6914, #FFD700, #8B6914, transparent);
+}
+
+.balance-display {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.balance-display span {
+  color: #FFD700;
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+  display: block;
+  margin-top: 4px;
+  font-family: 'Playfair Display', serif;
+}
+
+.deposit-section,
+.spin-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.spin-section button {
+  flex-shrink: 0;
 }
 
 input {
-  padding: 8px;
-  margin: 5px;
+  flex: 1;
+  padding: 12px 16px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+  border-color: #FFD700;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+input::placeholder {
+  color: #555;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
 button {
-  padding: 8px 15px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #FFD700 0%, #B8860B 100%);
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
   cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3), 0 2px 4px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+button:hover {
+  background: linear-gradient(180deg, #ffe033 0%, #d4a017 100%);
+  box-shadow: 0 4px 25px rgba(255, 215, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: scale(0.97);
 }
 
 #slot-display {
-  font-size: 30px;
-  margin-top: 20px;
+  font-size: 2.8rem;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  border-radius: 14px;
+  border: 1px solid #333;
+  letter-spacing: 14px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8) inset;
+}
+
+#result {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-height: 30px;
+  color: #FFD700;
+  text-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 500px) {
+  h1 { font-size: 2.2rem; }
+  .game-box { padding: 28px 20px; }
+  .spin-section { flex-wrap: wrap; }
+  .spin-section button { width: 100%; }
 }
