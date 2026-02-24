@@ -68,50 +68,56 @@ function transpose(reels) {
   return rows;
 }
 
-function getWinnings(rows, bet, lines) {
+function getWinnings(rows, bet) {
   let winnings = 0;
-  for (let row = 0; row < lines; row++) {
+
+  for (let row = 0; row < ROWS; row++) {
     const symbols = rows[row];
-    let allSame = true;
-    for (const symbol of symbols) {
-      if (symbol !== symbols[0]) {
-        allSame = false;
-        break;
-      }
-    }
-    if (allSame) {
+
+    if (symbols.every(s => s === symbols[0])) {
       winnings += bet * SYMBOL_VALUES[symbols[0]];
     }
   }
+
   return winnings;
 }
 
-function displayReels(rows, winningRows) {
+function displayReels(rows) {
   const display = document.getElementById("slot-display");
   display.innerHTML = "";
 
-  // Build a 3x3 grid
   const grid = document.createElement("div");
   grid.className = "reel-grid";
 
-  for (let r = 0; r < rows.length; r++) {
-    for (let c = 0; c < rows[r].length; c++) {
+  for (let c = 0; c < COLS; c++) {
+    const column = document.createElement("div");
+    column.className = "reel-column";
+
+    const strip = document.createElement("div");
+    strip.className = "reel-strip";
+
+    // Add many random symbols for scrolling illusion
+    for (let i = 0; i < 20; i++) {
+      const randomSymbol =
+        Object.keys(SYMBOL_DISPLAY)[
+          Math.floor(Math.random() * 4)
+        ];
+
       const cell = document.createElement("div");
       cell.className = "reel-cell";
-
-      if (winningRows.includes(r)) {
-        cell.classList.add("reel-win");
-      }
-
-      cell.textContent = SYMBOL_DISPLAY[rows[r][c]];
-      grid.appendChild(cell);
+      cell.textContent = SYMBOL_DISPLAY[randomSymbol];
+      strip.appendChild(cell);
     }
+
+    column.appendChild(strip);
+    grid.appendChild(column);
   }
 
   display.appendChild(grid);
 }
-
 function play() {
+  const spinBtn = document.querySelector(".spin-section button");
+
   const lines = parseInt(document.getElementById("lines").value);
   const bet = parseFloat(document.getElementById("bet").value);
 
@@ -125,35 +131,78 @@ function play() {
   }
 
   balance -= bet * lines;
+  document.getElementById("balance").innerText = balance;
+  document.getElementById("result").innerText = "🎰 Spinning...";
 
+  spinBtn.disabled = true;
+
+  displayReels();
+
+  const strips = document.querySelectorAll(".reel-strip");
+
+  strips.forEach((strip, index) => {
+    strip.classList.add("spinning");
+
+    const spinDistance = 1500 + index * 400;
+
+    setTimeout(() => {
+      strip.style.transform = `translateY(-${spinDistance}px)`;
+    }, 50);
+  });
+
+  // Generate real result
   const reels = spin();
   const rows = transpose(reels);
 
-  // Find winning rows
-  const winningRows = [];
-  for (let row = 0; row < lines; row++) {
-    const symbols = rows[row];
-    const allSame = symbols.every(s => s === symbols[0]);
-    if (allSame) winningRows.push(row);
+  setTimeout(() => {
+    strips.forEach(strip => strip.classList.remove("spinning"));
+
+    // Replace strip with final exact 3 rows
+    const columns = document.querySelectorAll(".reel-column");
+
+const winningRows = [];
+
+for (let row = 0; row < ROWS; row++) {
+  if (rows[row].every(s => s === rows[row][0])) {
+    winningRows.push(row);
+  }
+}
+
+columns.forEach((column, cIndex) => {
+  column.innerHTML = "";
+
+  const strip = document.createElement("div");
+  strip.className = "reel-strip";
+
+  for (let r = 0; r < ROWS; r++) {
+    const cell = document.createElement("div");
+    cell.className = "reel-cell";
+    cell.textContent = SYMBOL_DISPLAY[rows[r][cIndex]];
+
+    if (winningRows.includes(r)) {
+      cell.classList.add("reel-win");
+    }
+
+    strip.appendChild(cell);
   }
 
-  displayReels(rows, winningRows);
+  column.appendChild(strip);
+});
 
-  const winnings = getWinnings(rows, bet, lines);
-  balance += winnings;
+    const winnings = getWinnings(rows, bet);
+    balance += winnings;
+    document.getElementById("balance").innerText = balance;
 
-  document.getElementById("balance").innerText = balance;
+    const resultEl = document.getElementById("result");
+    if (winnings > 0) {
+      resultEl.innerText = "🎉 JACKPOT! You won $" + winnings + "!";
+      resultEl.style.color = "#FFD700";
+    } else {
+      resultEl.innerText = "😢 No win this time";
+      resultEl.style.color = "#888";
+    }
 
-  const resultEl = document.getElementById("result");
-  if (winnings > 0) {
-    resultEl.innerText = "🎉 You won $" + winnings + "!";
-    resultEl.style.color = "#FFD700";
-  } else {
-    resultEl.innerText = "😢 No win this time";
-    resultEl.style.color = "#888";
-  }
+    spinBtn.disabled = false;
 
-  if (balance <= 0) {
-    alert("Game Over!");
-  }
+  }, 2200);
 }
