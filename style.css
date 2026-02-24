@@ -222,3 +222,30 @@ button:active {
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
+/* How To Play Section */
+.how-to-play {
+  background: #111;
+  border: 1px solid #8B6914;
+  border-radius: 14px;
+  padding: 18px;
+  display: none;
+  text-align: left;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.1) inset;
+}
+
+.how-to-play h3 {
+  color: #FFD700;
+  margin-bottom: 10px;
+  font-family: 'Playfair Display', serif;
+}
+
+.how-to-play ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.how-to-play li {
+  margin-bottom: 8px;
+  color: #ccc;
+  font-size: 0.9rem;
+}

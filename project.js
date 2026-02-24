@@ -179,3 +179,16 @@ function play() {
     alert("Game Over!");
   }
 }
+// How To Play Toggle
+document.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("howToPlayBtn");
+  const section = document.getElementById("howToPlaySection");
+
+  btn.addEventListener("click", function () {
+    if (section.style.display === "block") {
+      section.style.display = "none";
+    } else {
+      section.style.display = "block";
+    }
+  });
+});
