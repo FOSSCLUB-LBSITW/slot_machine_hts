@@ -1,27 +1,37 @@
-const ROWS = 3;
-const COLS = 3;
+// ✅ Configurable Slot Machine Settings
 
-const SYMBOLS_COUNT = {
-  A: 2,
-  B: 4,
-  C: 6,
-  D: 8,
+const SLOT_CONFIG = {
+  rows: 3,
+  cols: 5, // You can change this to 3, 4, or 5
+
+  symbolsCount: {
+    A: 2,
+    B: 4,
+    C: 6,
+    D: 8,
+  },
+
+  symbolValues: {
+    A: 5,
+    B: 4,
+    C: 3,
+    D: 2,
+  },
+
+  symbolDisplay: {
+    A: "7️⃣",
+    B: "🔔",
+    C: "🍋",
+    D: "🍒",
+  }
 };
 
-const SYMBOL_VALUES = {
-  A: 5,
-  B: 4,
-  C: 3,
-  D: 2,
-};
+const ROWS = SLOT_CONFIG.rows;
+const COLS = SLOT_CONFIG.cols;
 
-// Map symbols to emojis for visual display
-const SYMBOL_DISPLAY = {
-  A: "7️⃣",
-  B: "🔔",
-  C: "🍋",
-  D: "🍒",
-};
+const SYMBOLS_COUNT = SLOT_CONFIG.symbolsCount;
+const SYMBOL_VALUES = SLOT_CONFIG.symbolValues;
+const SYMBOL_DISPLAY = SLOT_CONFIG.symbolDisplay;
 
 let balance = 0;
 
@@ -112,9 +122,10 @@ function displayReels(rows, winningRows) {
   const display = document.getElementById("slot-display");
   display.innerHTML = "";
 
-  // Build a 3x3 grid
+  //  Build dynamic grid based on configuration
   const grid = document.createElement("div");
   grid.className = "reel-grid";
+  grid.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
 
   for (let r = 0; r < rows.length; r++) {
     for (let c = 0; c < rows[r].length; c++) {
@@ -138,7 +149,7 @@ function play() {
   const bet = parseFloat(document.getElementById("bet").value);
 
   if (
-    isNaN(lines) || lines <= 0 || lines > 3 ||
+    isNaN(lines) || lines <= 0 || lines > ROWS ||
     isNaN(bet) || bet <= 0 ||
     bet * lines > balance
   ) {
