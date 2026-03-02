@@ -30,6 +30,26 @@ This project simulates a real slot machine where users can deposit money, place 
 
 ---
 
+## Screenshots
+
+Landing Page:
+
+![alt text](<Screenshot 2026-02-28 203001.png>)
+
+
+Instructions:
+
+![alt text](<Screenshot 2026-02-28 203120.png>)
+
+No win 
+
+![alt text](<Screenshot 2026-02-28 203222.png>)
+
+Wins obtained
+
+![alt text](<Screenshot 2026-02-28 203332.png>)
+---
+
 ## 🔢 Game Logic
 
 ### Symbol Distribution
