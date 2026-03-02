@@ -24,6 +24,9 @@ const SYMBOL_DISPLAY = {
 };
 
 let balance = 0;
+let isAutoSpinning = false;
+let autoSpinRemaining = 0;
+let autoSpinInterval = null;
 
 function deposit() {
   const deposit = parseFloat(document.getElementById("deposit").value);
@@ -176,8 +179,56 @@ function play() {
   }
 
   if (balance <= 0) {
-    alert("Game Over!");
+  alert("Game Over!");
+  stopAutoSpin();
+}
+}
+function startAutoSpin() {
+  if (isAutoSpinning) return;
+
+  const count = parseInt(document.getElementById("autoSpinCount").value);
+  autoSpinRemaining = count;
+
+  if (balance <= 0) {
+    alert("Insufficient balance!");
+    return;
   }
+
+  isAutoSpinning = true;
+  document.getElementById("spinBtn").disabled = true;
+  document.getElementById("autoSpinBtn").disabled = true;
+  document.getElementById("stopAutoSpinBtn").disabled = false;
+
+  document.getElementById("bet").disabled = true;
+  document.getElementById("lines").disabled = true;
+  document.getElementById("autoSpinCount").disabled = true;
+
+  autoSpinInterval = setInterval(() => {
+
+    if (autoSpinRemaining <= 0 || balance <= 0) {
+      stopAutoSpin();
+      return;
+    }
+
+    if (balance > 0) {
+  autoSpinRemaining--;
+  play();
+}
+
+  }, 1000);
+}
+
+function stopAutoSpin() {
+  clearInterval(autoSpinInterval);
+  isAutoSpinning = false;
+
+  document.getElementById("spinBtn").disabled = false;
+  document.getElementById("autoSpinBtn").disabled = false;
+  document.getElementById("stopAutoSpinBtn").disabled = true;
+
+  document.getElementById("bet").disabled = false;
+  document.getElementById("lines").disabled = false;
+  document.getElementById("autoSpinCount").disabled = false;
 }
 // How To Play Toggle
 document.addEventListener("DOMContentLoaded", function () {
@@ -191,4 +242,9 @@ document.addEventListener("DOMContentLoaded", function () {
       section.style.display = "block";
     }
   });
+  const autoBtn = document.getElementById("autoSpinBtn");
+  const stopBtn = document.getElementById("stopAutoSpinBtn");
+
+  autoBtn.addEventListener("click", startAutoSpin);
+  stopBtn.addEventListener("click", stopAutoSpin);
 });
