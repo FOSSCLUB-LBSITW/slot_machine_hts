@@ -21,7 +21,18 @@
     <div class="spin-section">
       <input type="number" id="lines" placeholder="Lines (1-3)">
       <input type="number" id="bet" placeholder="Bet per line">
-      <button onclick="play()">Spin</button>
+      <button id="spinBtn" onclick="play()">Spin</button>
+      <button id="autoSpinBtn">Auto Spin</button>
+
+<select id="autoSpinCount">
+  <option value="5">5 Spins</option>
+  <option value="10">10 Spins</option>
+  <option value="25">25 Spins</option>
+  <option value="50">50 Spins</option>
+</select>
+
+<button id="stopAutoSpinBtn" disabled>Stop Auto-Spin</button>
+
     </div>
     <button id="howToPlayBtn">How To Play</button>
 
