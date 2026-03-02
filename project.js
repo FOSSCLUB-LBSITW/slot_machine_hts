@@ -84,17 +84,22 @@ function getWinnings(rows, bet, lines) {
   // 🔹 Horizontal win check
   for (let row = 0; row < lines; row++) {
     const symbols = rows[row];
-    let allSame = true;
-
-    for (const symbol of symbols) {
-      if (symbol !== symbols[0]) {
-        allSame = false;
-        break;
-      }
+    const counts = {};
+    for (const s of symbols) {
+      counts[s] = (counts[s] || 0) + 1;
     }
 
-    if (allSame) {
-      winnings += bet * SYMBOL_VALUES[symbols[0]];
+    let rowWon = false;
+    for (const [symbol, count] of Object.entries(counts)) {
+      if (count === 3) {
+        winnings += bet * SYMBOL_VALUES[symbol];
+        rowWon = true;
+        break; // Only one symbol can have count 3 in a row of 3
+      } else if (count === 2) {
+        winnings += bet * 0.5;
+        rowWon = true;
+        break; // Only one symbol can have count 2 in a row of 3
+      }
     }
   }
 
@@ -108,10 +113,6 @@ function getWinnings(rows, bet, lines) {
         allSame = false;
         break;
       }
-    }
-
-    if (allSame) {
-      winnings += bet * SYMBOL_VALUES[firstSymbol];
     }
   }
 
@@ -166,8 +167,12 @@ function play() {
   const winningRows = [];
   for (let row = 0; row < lines; row++) {
     const symbols = rows[row];
-    const allSame = symbols.every(s => s === symbols[0]);
-    if (allSame) winningRows.push(row);
+    const counts = {};
+    for (const s of symbols) {
+      counts[s] = (counts[s] || 0) + 1;
+    }
+    const hasWin = Object.values(counts).some(count => count >= 2);
+    if (hasWin) winningRows.push(row);
   }
 
   displayReels(rows, winningRows);
