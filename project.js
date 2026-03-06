@@ -149,15 +149,24 @@ function displayReels(rows, winningRows) {
 }
 
 function play() {
-  const lines = parseInt(document.getElementById("lines").value);
-  const bet = parseFloat(document.getElementById("bet").value);
+  const linesStr = document.getElementById("lines").value;
+  const betStr = document.getElementById("bet").value;
 
-  if (
-    isNaN(lines) || lines <= 0 || lines > ROWS ||
-    isNaN(bet) || bet <= 0 ||
-    bet * lines > balance
-  ) {
+  if (linesStr.includes('.') || betStr.includes('.')) {
+    alert("Lines and Bet per line must be integer values");
+    return;
+  }
+
+  const lines = parseInt(linesStr);
+  const bet = parseInt(betStr);
+
+  if (isNaN(lines) || lines <= 0 || lines > ROWS || isNaN(bet) || bet <= 0) {
     alert("Invalid bet or lines");
+    return;
+  }
+
+  if (bet * lines > balance) {
+    alert("Insufficient Balance");
     return;
   }
 
@@ -195,9 +204,9 @@ function play() {
   }
 
   if (balance <= 0) {
-  alert("Game Over!");
-  stopAutoSpin();
-}
+    alert("Game Over!");
+    stopAutoSpin();
+  }
 }
 function startAutoSpin() {
   if (isAutoSpinning) return;
@@ -227,9 +236,9 @@ function startAutoSpin() {
     }
 
     if (balance > 0) {
-  autoSpinRemaining--;
-  play();
-}
+      autoSpinRemaining--;
+      play();
+    }
 
   }, 1000);
 }
