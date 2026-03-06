@@ -39,12 +39,12 @@ let autoSpinRemaining = 0;
 let autoSpinInterval = null;
 
 function deposit() {
-  const deposit = parseFloat(document.getElementById("deposit").value);
-  if (isNaN(deposit) || deposit <= 0) {
+  const depositAmount = parseFloat(document.getElementById("deposit").value);
+  if (isNaN(depositAmount) || depositAmount <= 0) {
     alert("Invalid deposit amount");
     return;
   }
-  balance += deposit;
+  balance += depositAmount;
   document.getElementById("balance").innerText = balance;
 }
 
