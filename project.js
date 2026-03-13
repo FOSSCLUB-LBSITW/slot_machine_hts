@@ -149,9 +149,16 @@ function displayReels(rows, winningRows) {
 }
 
 function play() {
-  const lines = parseInt(document.getElementById("lines").value);
-  const bet = parseFloat(document.getElementById("bet").value);
+  const linesStr = document.getElementById("lines").value;
+  const betStr = document.getElementById("bet").value;
 
+  if (linesStr.includes('.') || betStr.includes('.')) {
+    alert("Lines and Bet per line must be integer values");
+    return;
+  }
+
+  const lines = parseInt(linesStr);
+  const bet = parseInt(betStr);
   if (isNaN(lines) || lines <= 0 || lines > ROWS || isNaN(bet) || bet <= 0) {
     alert("Invalid bet or lines");
     return;
