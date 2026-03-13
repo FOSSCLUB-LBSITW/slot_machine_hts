@@ -159,7 +159,6 @@ function play() {
 
   const lines = parseInt(linesStr);
   const bet = parseInt(betStr);
-
   if (isNaN(lines) || lines <= 0 || lines > ROWS || isNaN(bet) || bet <= 0) {
     alert("Invalid bet or lines");
     return;
